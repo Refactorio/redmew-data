@@ -395,14 +395,24 @@ reskin_library.make_technology_icons = function(name, tint_mask, tint_highlights
     }
 end
 
---- Technology icons built from an item's icons, for machines whose artwork comes without technology icons
+--- Another technology's icon with an item's icon in its corner, as the base game marks its upgrade
+--- technologies, for machines whose artwork comes without technology icons
+---@param technology_name string 'effect-transmission'
 ---@param name string 'beacon'
 ---@param tint_mask Color
 ---@param tint_highlights? Color
-reskin_library.make_technology_icons_from_item = function(name, tint_mask, tint_highlights)
-    local icons = reskin_library.make_item_icons(name, tint_mask, tint_highlights)
-    for _, layer in pairs(icons) do
-        layer.scale = 2
+reskin_library.make_technology_icons_with_item = function(technology_name, name, tint_mask, tint_highlights)
+    local technology = data.raw.technology[technology_name]
+    if not technology then
+        error('Could not find technology/' .. technology_name)
+        return
+    end
+    local icons = table.deepcopy(technology.icons or { { icon = technology.icon, icon_size = technology.icon_size or 256 } })
+    icons[1].scale = icons[1].scale or 128 / (icons[1].icon_size or 64)
+    for _, layer in pairs(reskin_library.make_item_icons(name, tint_mask, tint_highlights)) do
+        layer.scale = 0.75
+        layer.shift = { 40, 40 }
+        icons[#icons + 1] = layer
     end
     return icons
 end
