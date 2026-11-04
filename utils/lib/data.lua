@@ -395,39 +395,75 @@ reskin_library.make_technology_icons = function(name, tint_mask, tint_highlights
     }
 end
 
-local function tint_icon_set(icons, tint)
-    local out = {}
+--- Technology icons built from an item's icons, for machines whose artwork comes without technology icons
+---@param name string 'beacon'
+---@param tint_mask Color
+---@param tint_highlights? Color
+reskin_library.make_technology_icons_from_item = function(name, tint_mask, tint_highlights)
+    local icons = reskin_library.make_item_icons(name, tint_mask, tint_highlights)
     for _, layer in pairs(icons) do
-        out[#out + 1] = table.deepcopy(layer)
-        local masked = table.deepcopy(layer)
-        masked.tint = tint
-        out[#out + 1] = masked
+        layer.scale = 2
     end
-    return out
+    return icons
 end
 
---- Reuses another prototype's icons with an extra tinted layer, for tiers without dedicated
---- mask/highlights artwork. Pass the base prototype's name, e.g. 'beacon'.
----@param base_name string
----@param tint Color
-reskin_library.make_tinted_item_icons = function(base_name, tint)
-    local base = data.raw.item[base_name]
-    if not base then
-        error('Could not find item/' .. base_name)
-        return
+--- Kirazy's beacon in place of the base game's: its bottom, with a tinted mask when given a tint,
+--- and its antenna. Run it on the base game's beacon graphics.
+---@param prototype data.BeaconPrototype
+---@param tint? Color
+reskin_library.make_beacon_layers = function(prototype, tint)
+    local filepath = '__redmew-data__/graphics/entity/beacon/beacon'
+    for _, element in pairs(prototype.graphics_set.animation_list) do
+        local animation = element.animation
+        if animation.layers and animation.layers[1].filename:find('/beacon%-bottom%.png$') then
+            local bottom = animation.layers[1]
+            bottom.filename = filepath .. '-base.png'
+            if tint then
+                local mask = table.deepcopy(bottom)
+                mask.filename = filepath .. '-mask.png'
+                mask.tint = tint
+
+                local highlights = table.deepcopy(bottom)
+                highlights.filename = filepath .. '-highlights.png'
+                highlights.blend_mode = 'additive-soft'
+
+                table.insert(animation.layers, 2, mask)
+                table.insert(animation.layers, 3, highlights)
+            end
+        elseif animation.filename and animation.filename:find('/beacon%-top%.png$') then
+            animation.filename = filepath .. '-top.png'
+        end
     end
-    return tint_icon_set(base.icons or { { icon = base.icon, icon_size = base.icon_size } }, tint)
 end
 
----@param base_name string
+--- Kirazy's steel furnace with a tinted mask, in place of the base game's
+---@param prototype data.FurnacePrototype
 ---@param tint Color
-reskin_library.make_tinted_technology_icons = function(base_name, tint)
-    local base = data.raw.technology[base_name]
-    if not base then
-        error('Could not find technology/' .. base_name)
-        return
-    end
-    return tint_icon_set(base.icons or { { icon = base.icon, icon_size = base.icon_size } }, tint)
+reskin_library.make_steel_furnace_layers = function(prototype, tint)
+    local filepath = '__redmew-data__/graphics/entity/steel-furnace/steel-furnace'
+    local layers = prototype.graphics_set.animation.layers
+    local layer = {
+        priority = 'high',
+        width = 172,
+        height = 174,
+        shift = util.by_pixel(-1, 2),
+        scale = 0.5,
+    }
+
+    local base = table.deepcopy(layer)
+    base.filename = filepath .. '-base.png'
+
+    local mask = table.deepcopy(layer)
+    mask.filename = filepath .. '-mask.png'
+    mask.tint = tint
+
+    local highlights = table.deepcopy(layer)
+    highlights.filename = filepath .. '-highlights.png'
+    highlights.blend_mode = 'additive-soft'
+
+    layers[1] = base
+    table.insert(layers, 2, mask)
+    table.insert(layers, 3, highlights)
 end
 
 reskin_library.make_tint_layers = function(obj)
@@ -903,6 +939,16 @@ reskin_library.switch_prototype = function(prototype, obj)
         reskin_library.make_steam_engine_tint_layers(prototype, tint)
     elseif reskin_type == 'loader-1x1' then
         reskin_library.make_1x1_loader_tint_layers(prototype, tint)
+    elseif reskin_type == 'beacon' then
+        reskin_library.make_beacon_layers(prototype, tint)
+    elseif reskin_type == 'steel-furnace' then
+        reskin_library.make_steel_furnace_layers(prototype, tint)
+    elseif reskin_type == 'lab' then
+        for _, animation in pairs({ prototype.on_animation, prototype.off_animation }) do
+            reskin_library.make_tint_layers{ layers = animation.layers, filepath = filepath, tint = tint }
+            -- make_tint_layers draws the base over the first layer: drop the base game's under it
+            table.remove(animation.layers, 1)
+        end
     end
 end
 

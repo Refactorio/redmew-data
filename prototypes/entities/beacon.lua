@@ -9,14 +9,22 @@ redmew.update_prototype(bc1)
 
 local base_item = data.raw.item['beacon']
 local entity = redmew.make_tier(bc2)
-entity.icons = redmew.reskin_library.make_tinted_item_icons('beacon', bc2._tint)
+
+-- The MK1 beacon gets Kirazy's beacon too, untinted, so that the two match
+local beacon_icons = { { icon = '__redmew-data__/graphics/icons/beacon/beacon-icon-base.png', icon_size = 64, scale = 0.5 } }
+local beacon = data.raw.beacon['beacon']
+redmew.reskin_library.make_beacon_layers(beacon)
+beacon.icon = nil
+beacon.icons = beacon_icons
+base_item.icon = nil
+base_item.icons = beacon_icons
 
 data:extend({
     -- Item
     {
         name = bc2.name,
         type = 'item',
-        icons = redmew.reskin_library.make_tinted_item_icons('beacon', bc2._tint),
+        icons = redmew.reskin_library.make_item_icons('beacon', bc2._tint),
         order = base_item.order,
         place_result = bc2.name,
         stack_size = base_item.stack_size,
@@ -41,7 +49,7 @@ data:extend({
     {
         type = 'technology',
         name = bc2._technology,
-        icons = redmew.reskin_library.make_tinted_technology_icons('effect-transmission', bc2._tint),
+        icons = redmew.reskin_library.make_technology_icons_from_item('beacon', bc2._tint),
         effects = { { type = 'unlock-recipe', recipe = bc2.name } },
         prerequisites = { 'effect-transmission', 'efficiency-module', 'utility-science-pack' },
         unit = {

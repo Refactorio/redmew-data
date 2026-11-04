@@ -9,7 +9,6 @@ redmew.update_prototype(sf1)
 
 local base_item = data.raw.item['steel-furnace']
 local entity = redmew.make_tier(sf2)
-entity.icons = redmew.reskin_library.make_tinted_item_icons('steel-furnace', sf2._tint)
 
 -- Double the energy draw if the furnace is electric; burners scale their fuel use with crafting speed
 if entity.energy_usage then
@@ -21,7 +20,7 @@ data:extend({
     {
         name = sf2.name,
         type = 'item',
-        icons = redmew.reskin_library.make_tinted_item_icons('steel-furnace', sf2._tint),
+        icons = redmew.reskin_library.make_item_icons('steel-furnace', sf2._tint),
         order = base_item.order,
         place_result = sf2.name,
         stack_size = base_item.stack_size,
@@ -46,7 +45,7 @@ data:extend({
     {
         type = 'technology',
         name = sf2._technology,
-        icons = redmew.reskin_library.make_tinted_technology_icons('steel-processing', sf2._tint),
+        icons = redmew.reskin_library.make_technology_icons_from_item('steel-furnace', sf2._tint),
         effects = { { type = 'unlock-recipe', recipe = sf2.name } },
         prerequisites = { 'steel-processing', 'logistic-science-pack' },
         unit = {

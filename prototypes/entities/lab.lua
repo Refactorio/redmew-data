@@ -9,14 +9,13 @@ redmew.update_prototype(lb1)
 
 local base_item = data.raw.item['lab']
 local entity = redmew.make_tier(lb2)
-entity.icons = redmew.reskin_library.make_tinted_item_icons('lab', lb2._tint)
 
 data:extend({
     -- Item
     {
         name = lb2.name,
         type = 'item',
-        icons = redmew.reskin_library.make_tinted_item_icons('lab', lb2._tint),
+        icons = redmew.reskin_library.make_item_icons('lab', lb2._tint),
         order = base_item.order,
         place_result = lb2.name,
         stack_size = base_item.stack_size,
@@ -41,7 +40,7 @@ data:extend({
     {
         type = 'technology',
         name = lb2._technology,
-        icons = redmew.reskin_library.make_tinted_technology_icons('automation', lb2._tint),
+        icons = redmew.reskin_library.make_technology_icons('lab', lb2._tint),
         effects = { { type = 'unlock-recipe', recipe = lb2.name } },
         prerequisites = { 'automation-2', 'speed-module', 'production-science-pack' },
         unit = {
