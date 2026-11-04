@@ -45,7 +45,7 @@ data:extend({
     {
         type = 'technology',
         name = sf2._technology,
-        icons = redmew.reskin_library.make_technology_icons_with_item('advanced-material-processing', 'steel-furnace', sf2._tint),
+        icons = redmew.reskin_library.make_technology_icons('steel-furnace', sf2._tint),
         effects = { { type = 'unlock-recipe', recipe = sf2.name } },
         prerequisites = { 'steel-processing', 'logistic-science-pack' },
         unit = {

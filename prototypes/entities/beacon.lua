@@ -49,7 +49,7 @@ data:extend({
     {
         type = 'technology',
         name = bc2._technology,
-        icons = redmew.reskin_library.make_technology_icons_with_item('effect-transmission', 'beacon', bc2._tint),
+        icons = redmew.reskin_library.make_technology_icons('beacon', bc2._tint),
         effects = { { type = 'unlock-recipe', recipe = bc2.name } },
         prerequisites = { 'effect-transmission', 'efficiency-module', 'utility-science-pack' },
         unit = {
