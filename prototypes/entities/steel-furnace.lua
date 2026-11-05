@@ -34,7 +34,8 @@ data:extend({
         energy_required = 5,
         ingredients = {
             { type = 'item', name = 'steel-furnace', amount = 2 },
-            { type = 'item', name = 'steel-plate', amount = 40 },
+            { type = 'item', name = 'copper-plate', amount = 40 },
+            { type = 'item', name = 'sulfur', amount = 20 },
             { type = 'item', name = 'refined-concrete', amount = 40 },
         },
         results = { { type = 'item', name = sf2.name, amount = 1 } },
@@ -47,12 +48,14 @@ data:extend({
         name = sf2._technology,
         icons = redmew.reskin_library.make_technology_icons('steel-furnace', sf2._tint),
         effects = { { type = 'unlock-recipe', recipe = sf2.name } },
-        prerequisites = { 'steel-processing', 'logistic-science-pack' },
+        prerequisites = { 'advanced-material-processing', 'concrete', 'production-science-pack' },
         unit = {
-            count = 100,
+            count = 250,
             ingredients = {
                 { 'automation-science-pack', 1 },
                 { 'logistic-science-pack', 1 },
+                { 'chemical-science-pack', 1 },
+                { 'production-science-pack', 1 },
             },
             time = 30,
         },
