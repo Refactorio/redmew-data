@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+Date: 2026-10-24
+  Changes:
+    - Added Beacon MK2 (beacon-2): doubled energy draw for stronger module effect distribution (2.5 vs 1.5, +0.3 per quality level) and a third module slot
+    - Added Lab MK2 (lab-2): double research speed, third module slot, 180kW
+    - Added Steel furnace MK2 (steel-furnace-2): double smelting speed and doubled energy draw, no module slots; extends the stone -> steel furnace fast-replace chain
+    - Added unlock technologies and recipes for all three tiers, following the existing MK2 machine patterns
+    - Beacon MK2 and Steel furnace MK2 use Kirazy's sprites with an MK2 tint mask, and the beacon also gets Kirazy's sprites, untinted; Lab MK2 uses Bob's Lab MK2 sprites from Kirazy's assets, with a mask made for its frame
+    - New tiers load wherever the advanced factory pack loads: Danger Ores vanilla, BZ and scrap
+---------------------------------------------------------------------------------------------------
 Version: 4.0.0
 Date: 2026-07-01
   Changes:
